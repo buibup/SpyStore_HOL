@@ -63,6 +63,15 @@ namespace SpyStore_HOL.MVC
             services.AddScoped<IOrderRepo, OrderRepo>();
             services.AddScoped<IOrderDetailRepo, OrderDetailRepo>();
             services.Configure<CustomSettings>(Configuration.GetSection("CustomSettings"));
+
+            services.AddWebOptimizer();
+
+            services.AddWebOptimizer(options =>
+            {
+                options.MinifyCssFiles(); //Minifies all CSS files
+                                          //options.MinifyJsFiles(); //Minifies all JS files
+                options.MinifyJsFiles("js/site.js"); //Minifies just one file
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +92,7 @@ namespace SpyStore_HOL.MVC
                 app.UseExceptionHandler("/Products/Error");
             }
 
+            app.UseWebOptimizer();
             app.UseStaticFiles();
             //app.UseCookiePolicy();
 
