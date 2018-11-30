@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-sm-2">
                     <label>Order Number</label>
-                    <a asp-action="Details" asp-route-customerId="@item.CustomerId" asp-routeorderId="@item.Id">
+                    <a asp-action="Details" asp-route-customerId="@item.CustomerId" asp-route-orderId="@item.Id">
                         @Html.DisplayFor(model => item.Id)
                     </a>
                 </div>
@@ -25,7 +25,7 @@
                     @Html.DisplayFor(model => item.OrderTotal)
                 </div>
                 <div class="col-sm-2">
-                    <a asp-action="Details" asp-route-customerId="@item.CustomerId" asp-routeorderId="@item.Id"
+                    <a asp-action="Details" asp-route-customerId="@item.CustomerId" asp-route-orderId="@item.Id"
                        class="btn btn-primary">Order Details</a>
                 </div>
             </div>
