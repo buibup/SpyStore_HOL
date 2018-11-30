@@ -3,7 +3,6 @@
 @foreach (var item in Model)
 {
     <li>
-        <a asp-controller="Products" asp-action="ProductList" asp-routeid="@
-item.Id">@item.CategoryName</a>
+        <a asp-controller="Products" asp-action="ProductList" asp-routeid="@item.Id">@item.CategoryName</a>
 </li>
 }
