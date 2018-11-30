@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -64,14 +65,30 @@ namespace SpyStore_HOL.MVC
             services.AddScoped<IOrderDetailRepo, OrderDetailRepo>();
             services.Configure<CustomSettings>(Configuration.GetSection("CustomSettings"));
 
-            services.AddWebOptimizer();
-
-            services.AddWebOptimizer(options =>
+            if (_env.IsDevelopment())
             {
-                options.MinifyCssFiles(); //Minifies all CSS files
-                                          //options.MinifyJsFiles(); //Minifies all JS files
-                options.MinifyJsFiles("js/site.js"); //Minifies just one file
-            });
+                services.AddWebOptimizer(options =>
+                {
+                    options.MinifyCssFiles("foo.css");
+                    options.MinifyJsFiles("foo.js");
+                });
+            }
+            else
+            {
+                services.AddWebOptimizer(options =>
+                {
+                    //Globbing is not working in the current released version, so this is a work around:
+                    var fileArray = Directory.GetFiles(@"wwwroot\js\validations", "*.js", SearchOption.AllDirectories);
+                    var jsAppFilenames = fileArray.Select(s => s.Replace(@"wwwroot\", "")).ToArray();
+
+                    options.MinifyCssFiles(); //Minifies all CSS files
+                    //options.MinifyJsFiles(); //Minifies all JS files
+                    options.MinifyJsFiles("js/site.js");
+                    //options.AddJavaScriptBundle("js/validations/validationCode.js", "js/validations/*.js");
+                    //options.AddJavaScriptBundle("js/validations/validationCode.js", "js/validations/validators.js", "js/validations/errorFormatting.js");
+                    options.AddJavaScriptBundle("js/validations/validationCode.js", jsAppFilenames);
+                });
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
